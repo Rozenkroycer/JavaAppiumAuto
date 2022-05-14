@@ -133,7 +133,7 @@ public class FirstTest {
                 "Java (programming language)",
                 article_title
         );
-    };
+    }
 
     @Test
     public void testComparePlaceholder()
@@ -143,7 +143,41 @@ public class FirstTest {
                 "Search Wikipedia",
                 "Text in the field isn't equal to the expected"
         );
-    };
+    }
+
+    @Test
+    public void testClearSearch()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                10
+        );
+       
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "There is no articles in the list"
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find 'X' cancel search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "The list of articles is still on the screen",
+                5
+        );
+    }
 
     private WebElement assertElementHasText (By by, String expected_text, String assert_error_message)
     {
