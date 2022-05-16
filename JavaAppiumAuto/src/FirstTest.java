@@ -478,6 +478,35 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testTitleArticlePresent()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        String search_line = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line,
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Cannot find 'Object-oriented programming language' topic searching by " + search_line,
+                5
+        );
+
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find title of article without waiting"
+        );
+    }
+
     private WebElement assertElementHasText (By by, String expected_text, String assert_error_message)
     {
         WebElement element = waitForElementPresent(by, "Cannot find element for compare");
@@ -548,7 +577,7 @@ public class FirstTest {
                 .moveTo(x, end_y)
                 .release()
                 .perform();
-    };
+    }
 
     protected void swipeUpQuick()
     {
@@ -607,5 +636,12 @@ public class FirstTest {
     {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private void assertElementPresent (By by, String error_message){
+        Boolean result = driver.findElement(by).isDisplayed();
+        if (result == false){
+            throw new AssertionError(error_message);
+        }
     }
 }
