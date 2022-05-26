@@ -29,7 +29,7 @@ public class MyListsPageObject extends MainPageObject{
         String folder_name_xpath = getFolderXpathByName(name_of_folder);
         this.waitForElementAndClick(
                 By.xpath(folder_name_xpath),
-                "Cannot find folde by name " + name_of_folder,
+                "Cannot find folder by name " + name_of_folder,
                 5
         );
     }
@@ -64,6 +64,21 @@ public class MyListsPageObject extends MainPageObject{
                 "Cannot find saved article"
         );
         this.waitForArticleToDisappearByTitle(article_title);
+    }
 
+    public void openArticleInTheList (String article_title)
+    {
+        String article_xpath = getSavedArticleXpathByTitle(article_title);
+        this.waitForElementPresent(
+                By.xpath(article_xpath),
+                "Cannot find the second article",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(article_xpath),
+                "Cannot find the second article for click",
+                5
+        );
     }
 }

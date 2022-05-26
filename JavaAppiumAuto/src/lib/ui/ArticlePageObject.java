@@ -14,13 +14,19 @@ public class ArticlePageObject extends MainPageObject{
         ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
         MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
         MY_LIST_OK_BUTTON = "//*[@text='OK']",
-        CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+        CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+        FOLDER_IN_THE_LIST_TPL = "//*[@text='{FOLDER}']";
 
 
 
     public ArticlePageObject (AppiumDriver driver)
     {
         super(driver);
+    }
+
+    private static String getFolderXpathByTitle(String name_of_folder)
+    {
+        return FOLDER_IN_THE_LIST_TPL.replace("{FOLDER}", name_of_folder);
     }
 
     public WebElement waitForTitleElement()
@@ -79,6 +85,27 @@ public class ArticlePageObject extends MainPageObject{
         this.waitForElementAndClick(
                 By.xpath(MY_LIST_OK_BUTTON),
                 "Cannot press 'OK' button",
+                5
+        );
+    }
+
+    public void addSecondArticleToMyList(String name_of_folder)
+    {
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                "Cannot find option to add article to reading list",
+                5
+        );
+        String folder_xpath = getFolderXpathByTitle(name_of_folder);
+        this.waitForElementAndClick(
+                By.xpath(folder_xpath),
+                "Cannot find reading list '" + name_of_folder + "' in the list",
                 5
         );
     }

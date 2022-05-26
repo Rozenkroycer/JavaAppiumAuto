@@ -128,7 +128,7 @@ public class MainPageObject {
         TouchAction action = new TouchAction(driver);
         action
                 .press(right_x, middle_y)
-                .waitAction(100)
+                .waitAction(350)
                 .moveTo(left_x, middle_y)
                 .release().perform();
     }

@@ -11,7 +11,8 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
         SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
         SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']",
-        SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+        SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+        SEARCH_LINE_PLACEHOLDER = "//*[contains(@text, 'Search Wikipedia')]";
 
 
     public SearchPageObject(AppiumDriver driver)
@@ -57,6 +58,13 @@ public class SearchPageObject extends MainPageObject {
         this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + substring);
     }
 
+    public void waitForSearchResultNotPresent(String substring)
+    {
+        String search_result_xpath = getResultSearchElement(substring);
+        this.waitForElementNotPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + substring, 15);
+
+    }
+
     public void clickByArtickleBySubstring(String substring)
     {
         String search_result_xpath = getResultSearchElement(substring);
@@ -78,19 +86,20 @@ public class SearchPageObject extends MainPageObject {
     public void waitForEmptyResultLabel()
     {
         this.waitForElementPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT), "Cannot find empty result element.", 15);
-
-        String empty_result_label = "//*[@text='No results found']";
-/*
-        this.waitForElementPresent(
-                By.xpath(empty_result_label),
-                "Cannot find empty result label by the request " + search_line,
-                15
-        );
-        */
     }
 
     public void assertThereIsNoResultOfSearch()
     {
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
     }
+
+    public void assertSearchLinePlaceholderText()
+    {
+        this.assertElementHasText(
+                By.xpath(SEARCH_LINE_PLACEHOLDER),
+                "Search Wikipedia",
+                "Text in the field isn't equal to the expected"
+        );
+    }
+
 }
